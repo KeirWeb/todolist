@@ -17,6 +17,7 @@ type TodolistPropsType = {
   ) => void;
   id: string;
   changeCurrentTodolistFilter: (filter: FilterType, id: string) => void;
+  deleteCurrentTodolist: (id: string) => void;
 };
 
 const Todolist: FC<TodolistPropsType> = ({
@@ -28,11 +29,16 @@ const Todolist: FC<TodolistPropsType> = ({
   id,
   changeCurrentTodolistFilter,
   filter,
+  deleteCurrentTodolist,
 }) => {
   const [inputValue, setInputValue] = useState("");
   const [error, setError] = useState<string>("");
   const changeTaskStatus = (taskId: string, isDone: boolean) => {
     changeCurrentTaskStatus(taskId, isDone, id);
+  };
+
+  const deleteTodolist = () => {
+    deleteCurrentTodolist(id);
   };
 
   const addNewTaskAndClearState = () => {
@@ -65,7 +71,9 @@ const Todolist: FC<TodolistPropsType> = ({
 
   return (
     <div>
-      <h3>{title}</h3>
+      <div>
+        <span>{title}</span> <Button callBack={deleteTodolist}>x</Button>
+      </div>
       <div>
         <Input
           callBack={onChangeInputValue}

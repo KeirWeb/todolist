@@ -4,15 +4,25 @@ type ButtonPropsType = {
   children: string;
   callBack: () => void;
   className?: string;
+  disabled?: boolean;
 };
 
-const Button: FC<ButtonPropsType> = ({ children, callBack, className }) => {
+const Button: FC<ButtonPropsType> = ({
+  children,
+  callBack,
+  className,
+  disabled,
+}) => {
   const onClickButtonHandler = () => {
     callBack();
   };
   return (
     <>
-      <button className={className} onClick={onClickButtonHandler}>
+      <button
+        disabled={disabled}
+        className={className}
+        onClick={onClickButtonHandler}
+      >
         {children}
       </button>
     </>
