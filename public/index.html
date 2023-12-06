@@ -41,13 +41,13 @@
     -->
   </body>
   <script>
-    function removeWhitespaces(string) {
-      return string
+    const str = "The quick brown fox jumps over the lazy dog.";
+    function reverseWords(str) {
+      return str
         .split(" ")
-        .filter((s) => s !== "")
-        .join("_");
+        .map((i) => i.split().reverse(" ").join(""))
+        .join(" ");
     }
-
-    console.log(removeWhitespaces("you are JS developer"));
+    reverseWords(str);
   </script>
 </html>
