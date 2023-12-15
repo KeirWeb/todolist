@@ -1,7 +1,7 @@
 {
   "name": "it-incubator-todolist-ts",
   "version": "0.1.0",
-  "homepage": "https://keirWeb.github.io/homework-front",
+  "homepage": "https://keirWeb.github.io/todolist",
   "private": true,
   "process": false,
   "dependencies": {
