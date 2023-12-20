@@ -2,12 +2,12 @@ import React from "react";
 import { v1 } from "uuid";
 import { TodolistType } from "../App";
 import {
-  RemoveTodolistAC,
-  ChangeTodolistTitleAC,
-  AddNewTodolistAC,
-  ChangeTodolistFilterAC,
+  removeTodolistAC,
+  changeTodolistTitleAC,
+  addNewTodolistAC,
+  changeTodolistFilterAC,
   todolistsReducer,
-} from "./todolists-reduser";
+} from "./todolists-reducer";
 
 let todolistID1 = v1();
 let todolistID2 = v1();
@@ -22,7 +22,7 @@ beforeEach(() => {
 });
 
 test("reducer should remove current todolist", () => {
-  const endState = todolistsReducer(startState, RemoveTodolistAC(todolistID1));
+  const endState = todolistsReducer(startState, removeTodolistAC(todolistID1));
 
   expect(endState.length).toBe(1);
   expect(endState[0].id).not.toBe(todolistID1);
@@ -34,7 +34,7 @@ test("reducer should change todolist title", () => {
 
   const endState = todolistsReducer(
     startState,
-    ChangeTodolistTitleAC(todolistID1, newTitle)
+    changeTodolistTitleAC(todolistID1, newTitle)
   );
 
   expect(endState[0].title).toBe(newTitle);
@@ -44,8 +44,9 @@ test("reducer should change todolist title", () => {
 
 test("reducer should add new todolist", () => {
   const title = "Test title";
+  const newId = v1();
 
-  const endState = todolistsReducer(startState, AddNewTodolistAC(title));
+  const endState = todolistsReducer(startState, addNewTodolistAC(newId, title));
 
   expect(endState.length).toBe(3);
   expect(endState[2].title).toBe(title);
@@ -57,7 +58,7 @@ test("reducer should change todolist filter", () => {
 
   const endState = todolistsReducer(
     startState,
-    ChangeTodolistFilterAC(todolistID1, newFilter)
+    changeTodolistFilterAC(todolistID1, newFilter)
   );
 
   expect(endState[0].filter).toBe(newFilter);

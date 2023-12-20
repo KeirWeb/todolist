@@ -1,5 +1,5 @@
 import { v1 } from "uuid";
-import { FilterValuesType, TodolistType } from "../App";
+import { FilterValuesType, TodolistType } from "../AppWithReducer";
 
 export type RemoveTodolistActionType = {
   type: "REMOVE-TODOLIST";
@@ -12,6 +12,7 @@ export type ChangeTodolistTitleActionType = {
 };
 export type AddNewTodolistActionType = {
   type: "ADD-NEW-TODOLIST";
+  newId: string;
   title: string;
 };
 export type ChangeTodolistFilterActionType = {
@@ -26,8 +27,16 @@ type ActionsType =
   | AddNewTodolistActionType
   | ChangeTodolistFilterActionType;
 
+export let todolistID1 = v1();
+export let todolistID2 = v1();
+
+const initialState: Array<TodolistType> = [
+  { id: todolistID1, title: "What to learn", filter: "all" },
+  { id: todolistID2, title: "What to buy", filter: "all" },
+];
+
 export const todolistsReducer = (
-  state: Array<TodolistType>,
+  state: Array<TodolistType> = initialState,
   action: ActionsType
 ): Array<TodolistType> => {
   switch (action.type) {
@@ -39,35 +48,41 @@ export const todolistsReducer = (
       );
 
     case "ADD-NEW-TODOLIST":
-      return [...state, { id: v1(), title: action.title, filter: "all" }];
+      return [
+        ...state,
+        { id: action.newId, title: action.title, filter: "all" },
+      ];
     case "CHANGE-TODOLIST-FILTER":
       return state.map((i) =>
         i.id === action.id ? { ...i, filter: action.newFilter } : i
       );
 
     default:
-      throw new Error("I don't understand this action type");
+      return state;
   }
 };
 
-export const RemoveTodolistAC = (
+export const removeTodolistAC = (
   todolistId: string
 ): RemoveTodolistActionType => {
   return { type: "REMOVE-TODOLIST", id: todolistId };
 };
 
-export const ChangeTodolistTitleAC = (
+export const changeTodolistTitleAC = (
   todolistId: string,
   title: string
 ): ChangeTodolistTitleActionType => {
   return { type: "CHANGE-TODOLIST-TITLE", id: todolistId, title };
 };
 
-export const AddNewTodolistAC = (title: string): AddNewTodolistActionType => {
-  return { type: "ADD-NEW-TODOLIST", title };
+export const addNewTodolistAC = (
+  newId: string,
+  title: string
+): AddNewTodolistActionType => {
+  return { type: "ADD-NEW-TODOLIST", newId, title };
 };
 
-export const ChangeTodolistFilterAC = (
+export const changeTodolistFilterAC = (
   todolistId: string,
   newFilter: FilterValuesType
 ): ChangeTodolistFilterActionType => {

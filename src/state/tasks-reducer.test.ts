@@ -6,8 +6,10 @@ import {
   addNewTaskAC,
   removeCurrentTaskAC,
   taskReducer,
-  ChangeCurrentTaskStatusAC,
-} from "./tasks-reduser";
+  changeCurrentTaskStatusAC,
+  addNewTasksArrayAC,
+  removeCurrentTasksArrayAC,
+} from "./tasks-reducer";
 
 const todolistID1 = v1();
 const todolistID2 = v1();
@@ -68,7 +70,7 @@ test("reducer should add new task", () => {
 test("reducer should change status current task", () => {
   const endState = taskReducer(
     startState,
-    ChangeCurrentTaskStatusAC(todolistID1, taskID1)
+    changeCurrentTaskStatusAC(todolistID1, taskID1)
   );
 
   expect(endState[todolistID1].find((t) => t.id === taskID1)?.isDone).not.toBe(
@@ -76,5 +78,22 @@ test("reducer should change status current task", () => {
   );
   expect(endState[todolistID1].length).toBe(5);
 
+  expect(endState).not.toBe(startState);
+});
+
+test("reducer should add new tasks array", () => {
+  let newTodolistId = v1();
+  const endState = taskReducer(startState, addNewTasksArrayAC(newTodolistId));
+
+  expect(endState[newTodolistId]).toBeTruthy();
+  expect(endState[newTodolistId].length).toBe(0);
+  expect(endState).not.toBe(startState);
+});
+test("reducer should remove current tasks array", () => {
+  const endState = taskReducer(
+    startState,
+    removeCurrentTasksArrayAC(todolistID1)
+  );
+  expect(endState[todolistID1]).toBeFalsy();
   expect(endState).not.toBe(startState);
 });

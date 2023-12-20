@@ -1,5 +1,6 @@
 import { v1 } from "uuid";
 import { TasksStateType } from "../App";
+import { todolistID1, todolistID2 } from "./todolists-reducer";
 
 export type ChangeCurrentTaskTitleAC = {
   type: "CHANGE-CURRENT-TASK-TITLE";
@@ -26,14 +27,42 @@ export type ChangeCurrentTaskStatusAC = {
   taskId: string;
 };
 
+export type AddNewTasksArrayAC = {
+  type: "ADD-NEW-TASKS-ARRAY";
+  todolistId: string;
+};
+export type RemoveCurrentTasksArray = {
+  type: "REMOVE-CERRENT-TASKS-ARRAY";
+  todolistId: string;
+};
+
 type ActionsType =
   | ChangeCurrentTaskTitleAC
   | RemoveCurrentTaskAC
   | AddNewTaskAC
-  | ChangeCurrentTaskStatusAC;
+  | ChangeCurrentTaskStatusAC
+  | AddNewTasksArrayAC
+  | RemoveCurrentTasksArray;
+
+const initialState = {
+  [todolistID1]: [
+    { id: v1(), title: "HTML&CSS", isDone: true },
+    { id: v1(), title: "JS", isDone: true },
+    { id: v1(), title: "ReactJS", isDone: false },
+    { id: v1(), title: "Rest API", isDone: false },
+    { id: v1(), title: "GraphQL", isDone: false },
+  ],
+  [todolistID2]: [
+    { id: v1(), title: "HTML&CSS2", isDone: true },
+    { id: v1(), title: "JS2", isDone: true },
+    { id: v1(), title: "ReactJS2", isDone: false },
+    { id: v1(), title: "Rest API2", isDone: false },
+    { id: v1(), title: "GraphQL2", isDone: false },
+  ],
+};
 
 export const taskReducer = (
-  state: TasksStateType,
+  state: TasksStateType = initialState,
   action: ActionsType
 ): TasksStateType => {
   switch (action.type) {
@@ -66,9 +95,18 @@ export const taskReducer = (
           t.id === action.taskId ? { ...t, isDone: !t.isDone } : t
         ),
       };
+    case "ADD-NEW-TASKS-ARRAY":
+      return {
+        ...state,
+        [action.todolistId]: [],
+      };
+    case "REMOVE-CERRENT-TASKS-ARRAY":
+      const newState = { ...state };
+      delete newState[action.todolistId];
+      return newState;
 
     default:
-      throw new Error("I don't understand this action type");
+      return state;
   }
 };
 
@@ -94,9 +132,18 @@ export const addNewTaskAC = (
   return { type: "ADD-NEW-TASK", todolistId, newTitle };
 };
 
-export const ChangeCurrentTaskStatusAC = (
+export const changeCurrentTaskStatusAC = (
   todolistId: string,
   taskId: string
 ): ChangeCurrentTaskStatusAC => {
   return { type: "CHANGE-CURRENT-TASK-STATUS", todolistId, taskId };
+};
+
+export const addNewTasksArrayAC = (todolistId: string): AddNewTasksArrayAC => {
+  return { type: "ADD-NEW-TASKS-ARRAY", todolistId };
+};
+export const removeCurrentTasksArrayAC = (
+  todolistId: string
+): RemoveCurrentTasksArray => {
+  return { type: "REMOVE-CERRENT-TASKS-ARRAY", todolistId };
 };
